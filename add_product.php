@@ -91,6 +91,11 @@
 
                     </form>
                 </div>
+                <div class="col-12">
+                    <footer class="py-3 text-center footer">
+                        <p>Scandiweb Test assignment</p>
+                    </footer>
+                </div>
             </div>
         </form>
     </div>

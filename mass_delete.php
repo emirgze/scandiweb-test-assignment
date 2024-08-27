@@ -1,20 +1,22 @@
 <?php
-define("DB_HOST", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "");
-define("DB_DATABASE", "scandiweb");
+require_once('config/db/connection.php');
 
-// Connection
-$_db_conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
+// define("DB_HOST", "localhost");
+// define("DB_USER", "root");
+// define("DB_PASS", "");
+// define("DB_DATABASE", "scandiweb");
 
-if (!$_db_conn) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-}
+// // Connection
+// $_db_conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
 
-// Change character set to utf8
-if (!mysqli_set_charset($_db_conn, "utf8")) {
-    printf("Error loading character set utf8: %s\n", mysqli_error($_db_conn));
-}
+// if (!$_db_conn) {
+//     die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+// }
+
+// // Change character set to utf8
+// if (!mysqli_set_charset($_db_conn, "utf8")) {
+//     printf("Error loading character set utf8: %s\n", mysqli_error($_db_conn));
+// }
 
 // Get the array of product IDs from POST
 $product_ids = isset($_POST['product_ids']) ? $_POST['product_ids'] : [];

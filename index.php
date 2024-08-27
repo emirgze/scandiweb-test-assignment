@@ -1,20 +1,22 @@
 <?php
-define("DB_HOST", "localhost");
-define("DB_USER", "root");
-define("DB_PASS", "");
-define("DB_DATABASE", "scandiweb");
+require_once('config/db/connection.php');
 
-// Connection
-$_db_conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
+// define("DB_HOST", "localhost");
+// define("DB_USER", "root");
+// define("DB_PASS", "");
+// define("DB_DATABASE", "scandiweb");
 
-if (!$_db_conn) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
-}
+// // Connection
+// $_db_conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
 
-// Change character set to utf8
-if (!mysqli_set_charset($_db_conn, "utf8")) {
-    printf("Error loading character set utf8: %s\n", mysqli_error($_db_conn));
-}
+// if (!$_db_conn) {
+//     die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+// }
+
+// // Change character set to utf8
+// if (!mysqli_set_charset($_db_conn, "utf8")) {
+//     printf("Error loading character set utf8: %s\n", mysqli_error($_db_conn));
+// }
 
 // Fetch products
 $query = "SELECT id, sku, name, price, product_type, size, weight, height, width, length FROM products";
@@ -54,7 +56,7 @@ mysqli_close($_db_conn);
                     <div class="header d-flex align-items-center justify-content-between">
                         <h1>Product List</h1>
                         <div class="text-right">
-                            <form action="add.html" method="get" style="display:inline;">
+                            <form action="add_product.php" method="get" style="display:inline;">
                                 <button type="submit" class="btn btn-primary">Add</button>
                             </form>
                             <form action="mass_delete.php" method="post" style="display:inline;">
@@ -76,15 +78,15 @@ mysqli_close($_db_conn);
                                 <input class="form-check-input" type="checkbox" name="product_ids[]" value="<?php echo htmlspecialchars($product['id']); ?>" id="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>">
                                 <label class="form-check-label" for="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>"></label>
                             </div>
-                            <h5 class="card-title"><?php echo htmlspecialchars($product['name']); ?></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><?php echo htmlspecialchars($product['sku']); ?></h6>
-                            <p class="card-text">Price: $<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></p>
+                            <h5 class="card-title text-center"><?php echo htmlspecialchars($product['name']); ?></h5>
+                            <h6 class="card-subtitle text-center mb-2 text-muted"><?php echo htmlspecialchars($product['sku']); ?></h6>
+                            <p class="card-text  text-center">Price: $<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></p>
                             <?php if ($product['product_type'] === 'dvd'): ?>
-                                <p class="card-text">Size: <?php echo htmlspecialchars($product['size']); ?> MB</p>
+                                <p class="card-text text-center">Size: <?php echo htmlspecialchars($product['size']); ?> MB</p>
                             <?php elseif ($product['product_type'] === 'book'): ?>
-                                <p class="card-text">Weight: <?php echo htmlspecialchars($product['weight']); ?> Kg</p>
+                                <p class="card-text text-center">Weight: <?php echo htmlspecialchars($product['weight']); ?> Kg</p>
                             <?php elseif ($product['product_type'] === 'furniture'): ?>
-                                <p class="card-text">Dimensions: <?php echo htmlspecialchars($product['height']); ?>x<?php echo htmlspecialchars($product['width']); ?>x<?php echo htmlspecialchars($product['length']); ?> cm</p>
+                                <p class="card-text text-center">Dimensions: <?php echo htmlspecialchars($product['height']); ?>x<?php echo htmlspecialchars($product['width']); ?>x<?php echo htmlspecialchars($product['length']); ?> cm</p>
                             <?php endif; ?>
                         </div>
                     </div>

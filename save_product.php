@@ -1,77 +1,102 @@
 <?php
-// require_once('config/db/config.php.php');
+require_once('config/db/connection.php');
 
+
+// Database configuration
 define("DB_HOST", "localhost");
 define("DB_USER", "root");
 define("DB_PASS", "");
 define("DB_DATABASE", "scandiweb");
 
-// Connection
-$_db_conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
+// Establish database connection using MySQLi
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_DATABASE);
 
-if (!$_db_conn) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+// Check connection
+if ($mysqli->connect_errno) {
+    die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 }
 
-// Change character set to utf8
-if (!mysqli_set_charset($_db_conn, "utf8")) {
-    printf("Error loading character set utf8: %s\n", mysqli_error($_db_conn));
+// Retrieve and sanitize input
+$sku = trim($_POST['sku']);
+$name = trim($_POST['name']);
+$price = trim($_POST['price']);
+$productType = trim($_POST['product_type']);
+
+// Basic validation
+if (empty($sku) || empty($name) || empty($price) || empty($productType)) {
+    header("Location: add_product.php?error=invalid_input");
+    exit();
 }
 
-// Prepare SQL statement
-$sql = "INSERT INTO products (sku, name, price, product_type, size, weight, height, width, length) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+// Check for existing SKU using prepared statement
+$stmt = $mysqli->prepare("SELECT id FROM products WHERE sku = ?");
+$stmt->bind_param("s", $sku);
+$stmt->execute();
+$stmt->store_result();
 
-$stmt = mysqli_prepare($_db_conn, $sql);
-
-if ($stmt === false) {
-    die('Prepare Error: ' . mysqli_error($_db_conn));
+if ($stmt->num_rows > 0) {
+    $stmt->close();
+    $mysqli->close();
+    header("Location: add_product.php?error=sku_exists");
+    exit();
 }
+$stmt->close();
 
-// Bind parameters
-mysqli_stmt_bind_param($stmt, "ssdssssss", $sku, $name, $price, $productType, $size, $weight, $height, $width, $length);
+// Prepare insert statement based on product type
+switch ($productType) {
+    case 'dvd':
+        $size = trim($_POST['size']);
+        if (empty($size) || !is_numeric($size) || $size <= 0) {
+            header("Location: add_product.php?error=invalid_input");
+            exit();
+        }
+        $stmt = $mysqli->prepare("INSERT INTO products (sku, name, price, product_type, size) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdsi", $sku, $name, $price, $productType, $size);
+        break;
 
-// Set parameters and execute
-$sku = $_POST['sku'];
-$name = $_POST['name'];
-$price = $_POST['price'];
-$productType = $_POST['productType'];
+    case 'book':
+        $weight = trim($_POST['weight']);
+        if (empty($weight) || !is_numeric($weight) || $weight <= 0) {
+            header("Location: add_product.php?error=invalid_input");
+            exit();
+        }
+        $stmt = $mysqli->prepare("INSERT INTO products (sku, name, price, product_type, weight) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdsi", $sku, $name, $price, $productType, $weight);
+        break;
 
-// Handle optional fields based on product type
-if ($productType === 'dvd') {
-    $size = $_POST['size'];
-    $weight = null;
-    $height = null;
-    $width = null;
-    $length = null;
-} elseif ($productType === 'book') {
-    $size = null;
-    $weight = $_POST['weight'];
-    $height = null;
-    $width = null;
-    $length = null;
-} elseif ($productType === 'furniture') {
-    $size = null;
-    $weight = null;
-    $height = $_POST['height'];
-    $width = $_POST['width'];
-    $length = $_POST['length'];
-} else {
-    die('Invalid product type');
+    case 'furniture':
+        $height = trim($_POST['height']);
+        $width = trim($_POST['width']);
+        $length = trim($_POST['length']);
+
+        if (
+            empty($height) || !is_numeric($height) || $height <= 0 ||
+            empty($width) || !is_numeric($width) || $width <= 0 ||
+            empty($length) || !is_numeric($length) || $length <= 0
+        ) {
+            header("Location: add_product.php?error=invalid_input");
+            exit();
+        }
+
+        $stmt = $mysqli->prepare("INSERT INTO products (sku, name, price, product_type, height, width, length) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdsddd", $sku, $name, $price, $productType, $height, $width, $length);
+        break;
+
+    default:
+        header("Location: add_product.php?error=invalid_input");
+        exit();
 }
 
 // Execute the statement
-if (mysqli_stmt_execute($stmt)) {
-    echo "Product saved successfully.";
+if ($stmt->execute()) {
+    $stmt->close();
+    $mysqli->close();
+    header("Location: index.php?status=added");
+    exit();
 } else {
-    echo "Execute Error: " . mysqli_stmt_error($stmt);
+    $stmt->close();
+    $mysqli->close();
+    header("Location: add_product.php?error=invalid_input");
+    exit();
 }
-
-// Close the statement and connection
-mysqli_stmt_close($stmt);
-mysqli_close($_db_conn);
-
-// Redirect or handle post-save logic here
-header("Location: index.php");
-exit();
 ?>

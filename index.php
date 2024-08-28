@@ -19,21 +19,42 @@ require_once('config/db/connection.php');
 // }
 
 // Fetch products
-$query = "SELECT id, sku, name, price, product_type, size, weight, height, width, length FROM products";
-$result = mysqli_query($_db_conn, $query);
+// $query = "SELECT id, sku, name, price, product_type, size, weight, height, width, length FROM products";
+// $result = mysqli_query($_db_conn, $query);
 
-if (!$result) {
-    die('Query Error: ' . mysqli_error($_db_conn));
+// if (!$result) {
+//     die('Query Error: ' . mysqli_error($_db_conn));
+// }
+
+// // Fetch all products
+// $products = [];
+// while ($row = mysqli_fetch_assoc($result)) {
+//     $products[] = $row;
+// }
+
+// // Close the connection
+// mysqli_close($_db_conn);
+?>
+
+<?php
+require_once 'Database.php';
+require_once 'getProduct.php';
+
+try {
+    // Initialize the database and product objects
+    $database = new Database();
+    $product = new getProduct($database);
+
+    // Fetch all products
+    $products = $product->getAllProducts();
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+    // Handle the error, e.g., log it or display a user-friendly message
+} finally {
+    if (isset($product)) {
+        $product->closeConnection();
+    }
 }
-
-// Fetch all products
-$products = [];
-while ($row = mysqli_fetch_assoc($result)) {
-    $products[] = $row;
-}
-
-// Close the connection
-mysqli_close($_db_conn);
 ?>
 
 
@@ -107,6 +128,7 @@ mysqli_close($_db_conn);
                 </div>
             </div>
         </div>
+
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -106,44 +106,53 @@ if ($stmt->execute()) {
 */
 
 
+
 require_once 'Database.php';
-require_once 'DVD.php';
-require_once 'Book.php';
-require_once 'Furniture.php';
+require_once 'Product.php';
 
 try {
     $db = new Database();
     $conn = $db->getConnection();
 
+    // Retrieve and sanitize input data
     $sku = trim($_POST['sku']);
     $name = trim($_POST['name']);
     $price = trim($_POST['price']);
     $productType = trim($_POST['product_type']);
 
+    // Initialize attributes array
+    $attributes = [];
+
+    // Set attributes based on product type
     switch ($productType) {
         case 'dvd':
-            $size = trim($_POST['size']);
-            $product = new DVD($sku, $name, $price, $size, $conn);
+            $attributes['size'] = trim($_POST['size']);
             break;
         case 'book':
-            $weight = trim($_POST['weight']);
-            $product = new Book($sku, $name, $price, $weight, $conn);
+            $attributes['weight'] = trim($_POST['weight']);
             break;
         case 'furniture':
-            $height = trim($_POST['height']);
-            $width = trim($_POST['width']);
-            $length = trim($_POST['length']);
-            $product = new Furniture($sku, $name, $price, $height, $width, $length, $conn);
+            $attributes['height'] = trim($_POST['height']);
+            $attributes['width'] = trim($_POST['width']);
+            $attributes['length'] = trim($_POST['length']);
             break;
         default:
             throw new Exception("Invalid product type.");
     }
 
+    // Create and save the product
+    $product = new Product($sku, $name, $price, $productType, $conn, $attributes);
     $product->save();
+
+    // Close the database connection
     $db->closeConnection();
+
+    // Redirect to the product list page with success status
     header("Location: index.php?status=added");
     exit();
+
 } catch (Exception $e) {
+    // Handle exceptions and redirect with an error message
     $db->closeConnection();
     header("Location: add_product.php?error=" . urlencode($e->getMessage()));
     exit();

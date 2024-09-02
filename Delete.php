@@ -54,41 +54,41 @@ exit();
 
 
 
-class MassDelete {
-    private $db;
+// class MassDelete {
+//     private $db;
 
-    public function __construct(Database $database) {
-        $this->db = $database->getConnection();
-    }
+//     public function __construct(Database $database) {
+//         $this->db = $database->getConnection();
+//     }
 
-    public function deleteProducts(array $productIds) {
-        if (empty($productIds)) {
-            throw new Exception('No products selected for deletion.');
-        }
+//     public function deleteProducts(array $productIds) {
+//         if (empty($productIds)) {
+//             throw new Exception('No products selected for deletion.');
+//         }
 
-        // Prepare the DELETE statement with placeholders
-        $placeholders = implode(',', array_fill(0, count($productIds), '?'));
-        $sql = "DELETE FROM products WHERE id IN ($placeholders)";
-        $stmt = $this->db->prepare($sql);
+//         // Prepare the DELETE statement with placeholders
+//         $placeholders = implode(',', array_fill(0, count($productIds), '?'));
+//         $sql = "DELETE FROM products WHERE id IN ($placeholders)";
+//         $stmt = $this->db->prepare($sql);
 
-        if ($stmt === false) {
-            throw new Exception('Prepare Error: ' . $this->db->error);
-        }
+//         if ($stmt === false) {
+//             throw new Exception('Prepare Error: ' . $this->db->error);
+//         }
 
-        // Bind parameters
-        $types = str_repeat('i', count($productIds));
-        $stmt->bind_param($types, ...$productIds);
+//         // Bind parameters
+//         $types = str_repeat('i', count($productIds));
+//         $stmt->bind_param($types, ...$productIds);
 
-        // Execute the statement
-        if (!$stmt->execute()) {
-            throw new Exception('Execute Error: ' . $stmt->error);
-        }
+//         // Execute the statement
+//         if (!$stmt->execute()) {
+//             throw new Exception('Execute Error: ' . $stmt->error);
+//         }
 
-        // Close the statement
-        $stmt->close();
-    }
-}
-?>
+//         // Close the statement
+//         $stmt->close();
+//     }
+// }
+// ?>
 
 
 

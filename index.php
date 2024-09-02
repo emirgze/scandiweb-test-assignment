@@ -83,7 +83,7 @@ try {
                                 <button type="submit" class="btn btn-primary">Add</button>
                             </form>
                             <form action="mass_delete.php" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger">Mass Delete</button>
+                                <button type="submit" class="btn btn-danger" id="delete_product_btn">Mass Delete</button>
                                 <!-- </form> -->
 
 
@@ -98,7 +98,7 @@ try {
                             <div class="card me-3 mb-3" style="width: 16rem;">
                                 <div class="card-body">
                                     <div class="form-check mb-2 float-start">
-                                        <input class="form-check-input" type="checkbox" name="product_ids[]" value="<?php echo htmlspecialchars($product['id']); ?>" id="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>">
+                                        <input class="form-check-input delete-checkbox" type="checkbox" name="product_ids[]" value="<?php echo htmlspecialchars($product['id']); ?>" id="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>">
                                         <label class="form-check-label" for="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>"></label>
                                     </div>
                                     <h5 class="card-title text-center"><?php echo htmlspecialchars($product['name']); ?></h5>

@@ -11,6 +11,11 @@ body {
     position: relative;
 }
 
+.main {
+    min-height: 100vh;
+    position: relative;
+}
+
 .header {
     border-bottom: 1px solid gray;
     margin: 20px 0px;

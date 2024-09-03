@@ -45,51 +45,54 @@
             <?php endif; ?>
 
             <div class="row">
-                <div class="col-12 col-md-6">
+                <div class="col-12 col-md-4">
+                    <div class="main">
 
-                    <form id="product_form" novalidate>
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="sku" class="form-label me-2">SKU</label>
-                            <input type="text" class="form-control" id="sku" name="sku" required>
-                            <div class="invalid-feedback">
-                                Please provide a SKU.
+
+                        <form id="product_form" novalidate>
+                            <div class="mb-3 d-flex align-items-center">
+                                <label for="sku" class="form-label me-2">SKU</label>
+                                <input type="text" class="form-control" id="sku" name="sku" required>
+                                <div class="invalid-feedback">
+                                    Please provide a SKU.
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="name" class="form-label me-2">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                            <div class="invalid-feedback">
-                                Please provide a name.
+                            <div class="mb-3 d-flex align-items-center">
+                                <label for="name" class="form-label me-2">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                                <div class="invalid-feedback">
+                                    Please provide a name.
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="price" class="form-label me-2">Price ($)</label>
-                            <input type="number" step="0.01" class="form-control" id="price" name="price" required>
-                            <div class="invalid-feedback">
-                                Please provide a valid price.
+                            <div class="mb-3 d-flex align-items-center">
+                                <label for="price" class="form-label me-2">Price ($)</label>
+                                <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                                <div class="invalid-feedback">
+                                    Please provide a valid price.
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="mb-3 d-flex align-items-center">
-                            <label for="productType" class="form-label me-2">Product Type</label>
-                            <select class="form-select" id="productType" name="product_type" required>
-                                <option value="">Select Type</option>
-                                <option value="dvd">DVD</option>
-                                <option value="book">Book</option>
-                                <option value="furniture">Furniture</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select a product type.
+                            <div class="mb-3 d-flex align-items-center">
+                                <label for="productType" class="form-label me-2">Product Type</label>
+                                <select class="form-select" id="productType" name="product_type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="dvd">DVD</option>
+                                    <option value="book">Book</option>
+                                    <option value="furniture">Furniture</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please select a product type.
+                                </div>
                             </div>
-                        </div>
 
-                        <div id="productAttributes" class="mb-3"></div>
+                            <div id="productAttributes" class="mb-3"></div>
 
-                        <div id="validationMessage" class="alert alert-danger hidden"></div>
+                            <div id="validationMessage" class="alert alert-danger hidden"></div>
 
-                    </form>
+                        </form>
+                    </div>
                 </div>
                 <div class="col-12">
                     <footer class="py-3 text-center footer">

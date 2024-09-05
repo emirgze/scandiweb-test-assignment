@@ -3,9 +3,9 @@
 
 
 require_once 'Database.php';
-require_once 'DVD.php';
-require_once 'Book.php';
-require_once 'Furniture.php';
+require_once 'models/Dvd.php';
+require_once 'models/Book.php';
+require_once 'models/Furniture.php';
 
 try {
     $db = new Database();
@@ -44,4 +44,3 @@ try {
     header("Location: add_product.php?error=" . urlencode($e->getMessage()));
     exit();
 }
-?>

@@ -1,14 +1,14 @@
 <?php
 require_once 'Database.php';
 require_once 'getProduct.php';
+require_once 'services/ProductService.php';
 
 try {
     // Initialize the database and product objects
     $database = new Database();
-    $product = new getProduct($database);
-
+    $productService = new ProductService($database);
     // Fetch all products
-    $products = $product->getAllProducts();
+    $products = $productService->getAll();
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
     // Handle the error, e.g., log it or display a user-friendly message
@@ -18,8 +18,6 @@ try {
     }
 }
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -64,11 +62,11 @@ try {
                                     <div class="card-body">
                                         <div class="form-check mb-2 float-start">
                                             <input class="form-check-input delete-checkbox" type="checkbox" name="product_ids[]" value="<?php echo htmlspecialchars($product['id']); ?>" id="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>">
-                                            <label class="form-check-label" for="cardCheckbox<?php echo htmlspecialchars($product['id']); ?>"></label>
+                                            <label class="form-check-label" for="cardCheckbox<?php echo($product['id']); ?>"></label>
                                         </div>
-                                        <h5 class="card-title text-center"><?php echo htmlspecialchars($product['name']); ?></h5>
+                                        <h5 class="card-title text-center"><?php echo($product['name']); ?></h5>
                                         <h6 class="card-subtitle text-center mb-2 text-muted"><?php echo htmlspecialchars($product['sku']); ?></h6>
-                                        <p class="card-text  text-center">Price: $<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></p>
+                                        <p class="card-text  text-center">Price: $<?php echo $product['price']; ?></p>
                                         <?php if ($product['product_type'] === 'dvd'): ?>
                                             <p class="card-text text-center">Size: <?php echo htmlspecialchars($product['size']); ?> MB</p>
                                         <?php elseif ($product['product_type'] === 'book'): ?>
